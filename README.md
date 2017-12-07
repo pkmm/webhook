@@ -9,9 +9,11 @@ Github/Bitbucket webhook tools
 
 ```golang
 // go run webhook.go xxx.conf (可直接使用run.sh脚本
-
+git clone [这个repo]
+配置wenhook.conf文件
+配置github  repo的setting 的 webhook
+然后在目录下运行 run.sh 即可
 ```
-
 这样就启动 webhook 服务器了。其中 conf 文件格式如下：
 
 ```
