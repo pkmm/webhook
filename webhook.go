@@ -8,6 +8,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"runtime"
+	"path"
 )
 
 // --------------------------------------------------------------------------------
@@ -48,7 +50,7 @@ var cfg Config
 // --------------------------------------------------------------------------------
 
 func runScript(item *WatchItem) (err error) {
-	script := "./" + item.Script
+	script := GetSourceCodePath() + "/" + item.Script
 	out, err := exec.Command("bash", "-c", script).Output()
 	if err != nil {
 		log.Printf("Exec command failed: %s\n", err)
@@ -107,9 +109,17 @@ func handle(w http.ResponseWriter, req *http.Request) {
 	handleGithub(event, &cfg)
 }
 
+// 运行时路径
+func GetSourceCodePath() string {
+	_, filename, _, _ := runtime.Caller(1)
+	return path.Dir(filename)
+}
+
 // --------------------------------------------------------------------------------
 
 func main() {
+
+	log.Println(GetSourceCodePath())
 
 	if len(os.Args) < 2 {
 		println("Usage: webhook <ConfigFile>\n")
