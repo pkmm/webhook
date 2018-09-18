@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"strings"
-	"runtime"
 	"path"
+	"runtime"
+	"strings"
 )
 
 // --------------------------------------------------------------------------------
@@ -60,17 +60,13 @@ func runScript(item *WatchItem) (err error) {
 	return
 }
 
-func handleGithub(event Payload, cfg *Config) (err error) {
+func handleGithub(event Payload, cfg *Config) {
 	for _, item := range cfg.Items {
 		if event.Repo.Url == item.Repo && strings.Contains(event.Ref, item.Branch) {
-			err = runScript(&item)
-			if err != nil {
-				log.Printf("run script error: %s\n", err)
-			}
+			go runScript(&item)
 			break
 		}
 	}
-	return
 }
 
 func handleBitbucket(event Payload, cfg *Config) {
